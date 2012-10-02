@@ -1,0 +1,11 @@
+_ReSharper*
+bin
+obj
+*.user
+*.suo
+*.cache
+src/**/logs
+*.docstates
+test-results/
+*.userprefs
+*.test-cache
