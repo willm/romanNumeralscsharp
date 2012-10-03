@@ -34,15 +34,19 @@ namespace RomanNumerals
     public class Roman
     {
         private int _number = 0;
+        private readonly Number _five = new Number{Arabic = 5, Roman = "V"};
+        private readonly Number _one = new Number{Arabic = 1, Roman = "I"};
+        private readonly Number _ten = new Number{Arabic = 10, Roman = "X"};
 
-        public string Convert(int number)
+        public string Convert(int initialNumber)
         {
-            _number = number;
+            _number = initialNumber;
             var numeral = "";
-            for (var i = 0; i < number; i++)
+            for (var i = 0; i < initialNumber; i++)
             {
-                numeral = numeral + SetBaseLetter(new Number(){Arabic = 10, Roman = "X"});
-                numeral = numeral + SetBaseLetter(new Number() { Arabic = 5, Roman = "V" });
+                numeral = numeral + SetBaseLetter(_one, _five);
+                numeral = numeral + SetBaseLetter(_one, _ten);
+                numeral = numeral + SetBaseLetter(_five, _ten);
 
                 if (_number < 4 &&  _number != 0)
                 {
@@ -52,22 +56,22 @@ namespace RomanNumerals
             return numeral;
         }
 
-        private string SetBaseLetter(Number baseNumber)
+        private string SetBaseLetter(Number prefix, Number baseNumber)
         {
-            if (_number == baseNumber.Arabic - 1)
+            if (_number == baseNumber.Arabic - prefix.Arabic)
             {
-                _number = _number - (baseNumber.Arabic - 1);
-                return "I" + baseNumber.Roman;
+                _number = _number - (baseNumber.Arabic - prefix.Arabic);
+                return prefix.Roman + baseNumber.Roman;
             }
             if (_number == baseNumber.Arabic)
             {
                 _number = _number - baseNumber.Arabic;
                 return baseNumber.Roman;
             }
-            if (_number == baseNumber.Arabic+1)
+            if (_number == baseNumber.Arabic + prefix.Arabic)
             {
-                _number = _number - (baseNumber.Arabic + 1); 
-                return baseNumber.Roman + "I";
+                _number = _number - (baseNumber.Arabic + prefix.Arabic); 
+                return baseNumber.Roman + prefix.Roman;
             }
             return "";
         }
