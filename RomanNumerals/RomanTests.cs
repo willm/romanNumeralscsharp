@@ -17,6 +17,7 @@ namespace RomanNumerals
         [TestCase(9, "IX")]
         [TestCase(10, "X")]
         [TestCase(11, "XI")]
+        [TestCase(15, "XV")]
         public void numbers_convert_as_expected(int number, string expectedNumeral)
         {
             var numeral = _roman.Convert(number);
@@ -24,56 +25,51 @@ namespace RomanNumerals
             Assert.That(numeral, Is.EqualTo(expectedNumeral));
         }
     }
-
+    public class Number
+    {
+        public int Arabic { get; set; }
+        public string Roman { get; set; }
+    }
 
     public class Roman
     {
         private int _number = 0;
 
-        // string[] _baseLetters = new string[]{"V", "X"};
         public string Convert(int number)
         {
             _number = number;
             var numeral = "";
             for (var i = 0; i < number; i++)
             {
-                numeral = numeral + SetBaseLetter("V", 5);
-                //numeral = numeral + SetBaseLetter("X", 10);
+                numeral = numeral + SetBaseLetter(new Number(){Arabic = 10, Roman = "X"});
+                numeral = numeral + SetBaseLetter(new Number() { Arabic = 5, Roman = "V" });
 
                 if (_number < 4 &&  _number != 0)
                 {
                     numeral = numeral + "I";
                 }
-                if (_number == 9)
-                {
-                    numeral = "IX";
-                }
-                if (_number == 10)
-                {
-                    numeral = "X";
-                }
             }
             return numeral;
         }
 
-        private string SetBaseLetter(string baseLetter, int baseNumber)
+        private string SetBaseLetter(Number baseNumber)
         {
-            if (_number == baseNumber - 1)
+            if (_number == baseNumber.Arabic - 1)
             {
-                _number = _number - (baseNumber - 1);
-                return "I" + baseLetter;
+                _number = _number - (baseNumber.Arabic - 1);
+                return "I" + baseNumber.Roman;
             }
-            if (_number == baseNumber)
+            if (_number == baseNumber.Arabic)
             {
-                _number = _number - baseNumber;
-                return baseLetter;
+                _number = _number - baseNumber.Arabic;
+                return baseNumber.Roman;
             }
-            if (_number == baseNumber+1)
+            if (_number == baseNumber.Arabic+1)
             {
-                _number = _number - (baseNumber + 1); 
-                return baseLetter + "I";
+                _number = _number - (baseNumber.Arabic + 1); 
+                return baseNumber.Roman + "I";
             }
-             return "";
+            return "";
         }
     }
 
